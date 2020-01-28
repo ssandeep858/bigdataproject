@@ -1,0 +1,51 @@
+select max(p.productname), max(p.category), max(p.subcategory) from productdata p, order_data o
+where p.id = o.productid
+and (o.orderdate BETWEEN '01-01-2011'AND '31-12-2011');
+
+select max(p.subcategory) from productdata p, order_data o
+where p.id = o.productid
+and (o.orderdate BETWEEN '01-01-2011'AND '31-12-2011');
+
+select max(p.productname) from productdata p, order_data o
+where p.id = o.productid
+and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2011-01-01', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2011-31-12', 'yyyy-MM-dd'),'yyyy-MM-dd') 
+group by o.orderdate
+;
+
+
+select max(p.productname) from productdata p, order_data o
+where p.id = o.productid
+and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2014-01-01', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2014-31-31', 'yyyy-MM-dd'),'yyyy-MM-dd');
+
+select sum(s.profit) from sales_data s, order_data o 
+where o.id = s.id
+and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2011-01-01', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(o.orderdate, 'dd-MM-yyyy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2011-31-12', 'yyyy-MM-dd'),'yyyy-MM-dd')
+;
+
+select sum(s.profit) from sales_data s, order_data o 
+where o.id = s.id
+and from_unixtime(unix_timestamp(o.orderdate, 'MM-DD-YY'),'yyyy-MM-dd') >= from_unixtime(unix_timestamp('2012-01-01', 'yyyy-MM-dd'),'yyyy-MM-dd') and from_unixtime(unix_timestamp(o.orderdate, 'MM-dd-yy'),'yyyy-MM-dd') <= from_unixtime(unix_timestamp('2012-31-12', 'yyyy-MM-dd'),'yyyy-MM-dd')
+;
+
+select sum(s.profit) from sales_data s, order_data o 
+where o.id = s.id
+And o.orderdate BETWEEN '01/01/11' AND '12/31/11';
+
+select sum(s.profit) from sales_data s, order_data o 
+where o.id = s.id
+and unix_timestamp(o.orderdate , 'MM/DD/YY') >= unix_timestamp('12/01/01', 'yy/MM/dd')
+and unix_timestamp(o.orderdate , 'MM/DD/YY') <= unix_timestamp('12/12/31', 'yy/MM/dd');
+
+select sum(s.profit) from sales_data s, order_data o 
+where o.id = s.id
+and unix_timestamp(o.orderdate , 'MM/DD/YY') >= unix_timestamp('13/01/01', 'yy/MM/dd')
+and unix_timestamp(o.orderdate , 'MM/DD/YY') <= unix_timestamp('13/12/31', 'yy/MM/dd');
+--CAST(TRANSLATE(o.orderdate ,"/","") AS BIGINT) > CAST(TRANSLATE("2011-01-01","-","") AS BIGINT)  AND CAST(TRANSLATE(o.orderdate ,"/","") AS BIGINT) < CAST(TRANSLATE("2011-12-12","-","") AS BIGINT);
+
+select sum(s.profit) from sales_data s;
+select p.subcategory, count(p.subcategory) as category_count, c.region from productdata p, customersdata c,  sales_data s
+where c.id = s.customerid
+and p.id = s.productid
+group by c.region, p.subcategory order by category_count DESC
+limit 100;
+--drop table ordersdata;
